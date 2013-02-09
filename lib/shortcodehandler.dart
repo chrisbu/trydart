@@ -7,10 +7,13 @@ import 'dart:json';
 import 'dart:crypto';
 
 class ShortcodeHandler {
+  // TODO: Write a generic properties handler!!!
+  /* properties for my local machine */
   static const ROOT_FOLDER = "/work/tmp/";
   static const FILE_URI_PREFIX = "file:///c:$ROOT_FOLDER";
   static const DRIVE_PREFIX = "c:";
-  
+
+/* Properties for deployment */
 //  static const ROOT_FOLDER = "/data/darts/";
 //  static const DRIVE_PREFIX = "";
 //  static const FILE_URI_PREFIX = "file://$ROOT_FOLDER";

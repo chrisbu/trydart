@@ -18,6 +18,7 @@ void main() {
       shortcodeHandler.matcher, 
       shortcodeHandler.handler);
   
+  server.onError = (err) => print(err);
   
   server.listen("0.0.0.0", 8080);
   print("listening...");

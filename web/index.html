@@ -9,32 +9,36 @@
   <body>
     <div id="notes">
         Try out <a href="http://www.dartlang.org">Dart</a> in your browser.<br>
-        Current SDK version: <b>17072</b>
+        Current SDK version: <b>17328</b>
     </div>
     
     <div id="content">
       <div class="codeeditarea">
         <h4>1. Enter some Dart Code</h4>
-        <textarea id="editor" spellcheck="false">
-final messages = ["Great","Cool","Awesome"];
-
-void main() {
-  messages.forEach((msg) => print("Dart is $msg"));
-}</textarea>
+        <!--<textarea id="editor" spellcheck="false">-->
+          <div id="editor"></div>
+        
+      </div>
+      <div class="resultsarea">
         <div>
            <h4>2. Press <button id="run">Run</button><h4>
            
         </div>
-      </div>
-      <div class="resultsarea">
-        
         <h4>3. View your results:</h4>
          <pre id="results">Press RUN to execute your code...</pre>
          <p id="shortcode"></p>
+         <div class="g-plusone" data-annotation="inline" data-width="300"></div>
        </div>
     </div> <!-- content -->
     <script type="application/dart" src="trydart.dart"></script>
     <script src="packages/browser/dart.js"></script>
+    <script src="ace/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+        var editor = ace.edit("editor");
+        editor.setTheme("ace/theme/eclipse");
+        editor.getSession().setMode("ace/mode/dart");
+        //editor.getSession().setPrintMarginNumber(80);
+    </script>
     <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -47,6 +51,16 @@ void main() {
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
 
+</script>
+<!-- Place this tag after the last +1 button tag. -->
+<script type="text/javascript">
+  window.___gcfg = {lang: 'en-GB'};
+
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
 </script>
   </body>
 </html>

@@ -32,7 +32,7 @@ String generateShortcode(String content) {
 
 /** returns true if the entered [shortcode] such as
  * /AbCdE1 
- * begins with a /, total length 7 chars,
+ * begins with a /, and is the correct length of characters,
  * and contains a-zA-Z0-9 only 
  */ 
 bool isValidShortcode(String shortcode) {

@@ -1,4 +1,3 @@
-
 body {
   background-color: #C8C8C8;
   font-family: 'Open Sans', sans-serif;
@@ -9,13 +8,11 @@ body {
 }
 
 .codeeditarea {
-  width: 45%;
-  float:left;
 }
 
 .resultsarea {
-  width: 45%;
-  float:right;   
+  width:670px;
+  padding-top: 260px;
 }
 
 #results {
@@ -40,14 +37,14 @@ button {
 }
 
 #editor{
-  width:100%;
-  height:400px;
+  width:670px;
+  height:240px;
   border: 1px solid #ccc;
   margin: 2px;
   padding: 2px;
   background-color: #fff;
  }
- 
+
 .textAreaWithLines{
     font-family:courier;      
     border:1px solid #F00;

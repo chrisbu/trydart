@@ -47,14 +47,21 @@ class StaticFileHandler {
   void handler(req,HttpResponse res) {
     
     var requestedpath; 
-    if (req.path.length == 0 || req.path == "/" || isValidShortcode(req.path)) {
+    print(req.path);
+    print(isValidShortcode(req.path));
+    if (req.path.startsWith("/packages/") || 
+        req.path.startsWith("/lib/") ||
+        req.path.startsWith("/ace/")) {
+      requestedpath = req.path;
+    }
+    else if (req.path.length == 0 || req.path == "/" || isValidShortcode(req.path)) {
       requestedpath = "/index.html";
     }
     else
     {
       requestedpath = req.path;
     }
-    
+    print(requestedpath);
     var root;
     
     if (requestedpath.startsWith("/lib")) {
