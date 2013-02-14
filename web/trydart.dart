@@ -12,12 +12,12 @@ void main() {
 }""";
 
 void main() {
-  query("#run").on.click.add(onRunButtonClick);
-  query("#editor").on.keyPress.add((e) => query("#shortcode").children.clear());
+  query("#run").onClick.listen(onRunButtonClick);
+  query("#editor").onKeyPress.listen((e) => query("#shortcode").children.clear());
   //createTextAreaWithLines("editor");
   init();
-  window.on.popState.add((PopStateEvent e) {
-    print("state: ${e.state}");
+  window.onPopState.listen((PopStateEvent e) {
+    //print("state: ${e.state}");
     if (e.state != null) {
       window.location.replace("${e.state}");
     }
@@ -70,7 +70,7 @@ updateShortcode(_shortcode) {
 void shortcodeDataLoaded(String responseText) {
   query("#run").disabled = false;
   var map = parse(responseText);
-  query("#run").text = "Run";
+  query("#run").text = "Go Dart!";
   
   js.scoped(() {
     var editor = js.context.editor;
