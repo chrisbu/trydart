@@ -32,7 +32,7 @@ init() {
   shortcode = pathToShortcode(window.location.pathname);
   
   if (isValidShortcode(shortcode) && !isDefaultShortcode(shortcode)) {
-    new HttpRequest.get("/load/$shortcode", loadShortcodeData);
+    HttpRequest.getString("/load/$shortcode").then(shortcodeDataLoaded);
   } 
   else {
     js.scoped(() {
@@ -57,18 +57,19 @@ updateShortcode(_shortcode) {
 <div class="g-plusone" data-annotation="inline" data-width="300"></div>""";
   
   query("#shortcode").children.clear();
-  var span = new Element.html("<span><h4>4. Share your code with others</h4><a href='$url'>$url</a></span>");
+  var span = new Element.html("<span><h4>4. Share your code with others</h4><a href='$url'>$url</a>&nbsp;</span>");
   
   query("#shortcode").children.add(span);
-  var clippy = getClippy(url,"#C8C8C8");
+  
+  var clippy = getClippy(url,"#FFFFFF");
   query("#shortcode").children.add(clippy);
   
   window.history.pushState(url, url, url);
 }
 
-void loadShortcodeData(HttpRequest req) {
+void shortcodeDataLoaded(String responseText) {
   query("#run").disabled = false;
-  var map = parse(req.responseText);
+  var map = parse(responseText);
   query("#run").text = "Run";
   
   js.scoped(() {
@@ -86,8 +87,9 @@ void onRunButtonClick(e) {
   query("#run").text = "running...";
   var req = new HttpRequest();
   req.open("PUT", "/run/$shortcode", true, null, null);
-  req.on.progress.add((e) => loadShortcodeData(req));
-  
+  req.onProgress.listen((e) => shortcodeDataLoaded(req.responseText));
+
+  // get the text from the editor
   js.scoped(() {
     var editor = js.context.editor;
     req.send(editor.getValue());

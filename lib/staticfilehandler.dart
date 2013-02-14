@@ -27,6 +27,7 @@ class StaticFileHandler {
          path.contains(".js") ||
          path.contains(".maps") ||
          path.contains(".deps") ||
+         path.contains(".png") ||
          path.contains(".swf")) {
        
        result = true; // standard file request
@@ -51,6 +52,8 @@ class StaticFileHandler {
     print(isValidShortcode(req.path));
     if (req.path.startsWith("/packages/") || 
         req.path.startsWith("/lib/") ||
+        req.path.startsWith("/css/") ||
+        req.path.startsWith("/js/") ||
         req.path.startsWith("/ace/")) {
       requestedpath = req.path;
     }

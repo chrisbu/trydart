@@ -1,36 +1,90 @@
-<!DOCTYPE html>
-
+<!doctype html>
 <html>
+  
   <head>
-    <meta charset="utf-8">
-    <meta name="description" content="Try Dart in your browser"
-    <title>Try Dart</title>
-    <link rel="stylesheet" href="trydart.css">
+    <title>TryDart</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <meta name="description" content="Test Dart code in your browser">
+    <meta name="keywords" content="Dart, code, google, test"
   </head>
+  
   <body>
-    <div id="notes">
-        Try out <a href="http://www.dartlang.org">Dart</a> in your browser.<br>
-        Current SDK version: <b>17328</b>
-    </div>
-    
-    <div id="content">
-      <div class="codeeditarea">
-        <h4>1. Enter some Dart Code</h4>
-        <!--<textarea id="editor" spellcheck="false">-->
-          <div id="editor"></div>
-        
-      </div>
-      <div class="resultsarea">
-        <div>
-           <h4>2. Press <button id="run">Run</button><h4>
-           
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="#">Try Dart</a>
+          <div class="navbar-content">
+            <ul class="nav ">
+              <li class="active">
+                <a href="#">Home</a> 
+              </li>
+         <!--     <li>
+                <a href="#">Contribute</a> 
+              </li>-->
+            </ul>
+          </div>
         </div>
-        <h4>3. View your results:</h4>
-         <pre id="results">Press RUN to execute your code...</pre>
+      </div>
+    </div>
+    <div class="container">
+      <div class="hero-unit hidden-phone">
+        <img src="dart_logo.png" class="pull-right img-rounded" width="130px" height="110px">
+        <h1 class="page-header">Try Dart</h1>
+        <p>The easiest way to test Dart code snippets in the browser.</p>
+        <p></p>
+      </div>
+      <div class="row main-features">
+        <div class="span4">
+          <div class="well">
+            <h3 class="align-center">1. Type in some code</h3>
+          </div>
+        </div>
+        <div class="span4">
+          <div class="well">
+            <h3 class="align-center">2. Click "Go Dart!"</h3>
+          </div>
+        </div>
+        <div class="span4">
+          <div class="well">
+            <h3 class="align-center">3. Watch the magic</h3>
+          </div>
+        </div>
+      </div>
+      </div>      
+      <div class="container">
+      <div id="editor">
+        <!--<textarea id="editor" spellcheck="false">-->
+      </div>
+      </div>
+      <div class="container">
+        <div class="offset6">
+        <button class="btn btn-primary btn-large" id="run">Go Dart!</button> 
+        <br/>
+        <br/> 
+         <pre id="results">Results Show Here...</pre>
          <p id="shortcode"></p>
-         <div class="g-plusone" data-annotation="inline" data-width="300"></div>
-       </div>
-    </div> <!-- content -->
+        </div>
+      </div> 
+
+    <div class="container">
+      <div class="span3 offset5">
+      
+      </div>
+    </div>
+    <footer class="container">
+      <div class="pull-right">
+        <div class="g-plusone" data-annotation="inline" data-width="300"></div>
+          <p>Current SDK version: 18300</p>
+          <p>Thanks to <a href="https://plus.google.com/u/0/102938225230337012910/posts">+Josh Milo</a> for the UI design</p>
+      </div>
+      <a href="http://blog.dartwatch.com"><img src="dartwatch_logo.png" class="pull-left img-rounded"> 
+      Visit Dartwatch.com<br/> for Dart news and tutorials.</a>
+    </footer>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
     <script type="application/dart" src="trydart.dart"></script>
     <script src="packages/browser/dart.js"></script>
     <script src="ace/ace.js" type="text/javascript" charset="utf-8"></script>
@@ -64,4 +118,5 @@
   })();
 </script>
   </body>
+
 </html>
