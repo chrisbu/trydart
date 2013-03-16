@@ -44,6 +44,7 @@ class StaticFileHandler {
          path.contains(".maps") ||
          path.contains(".deps") ||
          path.contains(".png") ||
+         path.contains(".ico") ||
          path.contains(".swf")) {
        
        logger.fine("StaticFileHandler matched file request: GET:${path}");
@@ -131,6 +132,7 @@ class StaticFileHandler {
           path.startsWith("/js/") ||
           path.startsWith("/out/") ||
           path.startsWith("/css") ||
+          path.startsWith("/favicon.ico") ||
           path.startsWith("/packages")) {
         result = path; // explicitly, because these URLs might also be valid shortcodes.
       }
@@ -151,7 +153,6 @@ class StaticFileHandler {
       }
       
       pathCache[path] = result;
-      print(pathCache);
     }
     else {
       logger.fine("Path cache hit for $path");

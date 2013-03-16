@@ -8,4 +8,4 @@ fileUriPrefix: "c:"
 # rootFolder: /data/darts/
 # drivePrefix: 
 # fileUriPrefix: "file://"
-loglevel: ALL
+loglevel: INFO

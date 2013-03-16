@@ -56,6 +56,7 @@ bool isValidShortcode(String shortcode) {
 String pathToShortcode(String pathname) {
   // eg: http://foo.com:8080/bar.html <- not a shortcode
   // or  http://foo.com:8080/AbCdE1 <- valid shortcode
+  
   var path = pathname.substring(
                 pathname.lastIndexOf("/") + 1,
                 pathname.length);

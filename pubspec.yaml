@@ -5,3 +5,5 @@ dependencies:
   dart_config: any
   browser: any
   logging: any
+  query_string:
+    git: https://github.com/kaisellgren/QueryString.git

@@ -1,9 +1,9 @@
 import 'dart:html';
 import 'dart:json';
 import 'package:js/js.dart' as js;
+import 'package:query_string/query_string.dart';
 
 import '../lib/shortcode.dart';
-import '../lib/codearea.dart';
 
 final defaultCode = r"""final messages = ["Great","Cool","Awesome"];
 
@@ -29,7 +29,18 @@ var shortcode = "";
 init() {
   print("init");
   // get the file part of the path
-  shortcode = pathToShortcode(window.location.pathname);
+  print(window.location.search);
+  
+  if (window.location.search != null && window.location.search.length > 0) {
+    var queryParams = QueryString.parse(window.location.search);
+    shortcode = queryParams["sc"];
+  }
+  
+  if (shortcode == null || shortcode.length == 0) {
+    shortcode = pathToShortcode(window.location.pathname);
+  }
+  
+  
   print("shortcode: $shortcode");
   if (isValidShortcode(shortcode) && !isDefaultShortcode(shortcode)) {
     print("loading shortcode");
@@ -48,7 +59,15 @@ updateShortcode(_shortcode) {
   shortcode = _shortcode;
   
   var url = "http://${window.location.hostname}:${window.location.port}";
-  print(url);
+  var embedUrl = url;
+  bool isEmbed = false;
+  embedUrl = "$url/embed.html?sc=$shortcode";
+  
+  if (window.location.pathname.toLowerCase().contains("embed.html")) {
+    
+    isEmbed = true;
+  }
+  
   if (!url.contains(shortcode)) {
     if (!url.endsWith("/"))  url = "$url/$shortcode";
     else url = "$url$shortcode";
@@ -58,20 +77,31 @@ updateShortcode(_shortcode) {
 <div class="g-plusone" data-annotation="inline" data-width="300"></div>""";
   
   query("#shortcode").children.clear();
-  var span = new Element.html("<span><h4>4. Share your code with others</h4><a href='$url'>$url</a>&nbsp;</span>");
-  
+  var span = new Element.tag("span");
+  if (!isEmbed) {
+    span.children.add(new Element.html("<span><a href='$url'>Share Shortcode</a></span>"));
+    var clippy1 = getClippy(url,"#FFFFFF");
+    span.children.add(clippy1);
+    span.children.add(new Element.html("<br>"));
+    span.children.add(new Element.html("<span><a href='$embedUrl'>Embed </a></span>"));
+    var clippy2 = getClippy(embedUrl,"#FFFFFF");
+    span.children.add(clippy2);
+  }
+  else {
+    span.children.add(new Element.html("<span>View this code at <a href='$url' target='_blank'>trydart.dartwatch.com</a></span>"));    
+  }
   query("#shortcode").children.add(span);
   
-  var clippy = getClippy(url,"#FFFFFF");
-  query("#shortcode").children.add(clippy);
-  
-  window.history.pushState(url, url, url);
+  // only update the url of the window if it's not embeded.
+  if (!isEmbed) {
+    window.history.pushState(url, url, url);
+  }
 }
 
 void shortcodeDataLoaded(String responseText) {
   ButtonElement runButton = query("#run");
   runButton.disabled = false;
-  runButton.text = "Go Dart!";
+  runButton.text = "Run";
 
   var map = parse(responseText);
   js.scoped(() {
@@ -89,6 +119,7 @@ void onRunButtonClick(e) {
   runButton.disabled = true;
   runButton.text = "running...";
   var req = new HttpRequest();
+  print(shortcode);
   req.open("PUT", "/run/$shortcode", true, null, null);
   req.onProgress.listen((e) => shortcodeDataLoaded(req.responseText));
 

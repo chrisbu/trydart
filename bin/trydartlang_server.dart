@@ -38,7 +38,6 @@ void startWebServer(Map config) {
   HttpServer.bind(host, port).then((server) {
     logger.info("Listening on $host:$port");
     server.listen((request) {
-      print("request");
       handleRequests(request, handlers, notFound);
     },
     onError: (error) => logger.warning("server.listen: ${error}"));         

@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+  
+  <head>
+    <title>TryDart</title>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <link rel="stylesheet" href="css/bootstrap.css">    
+    <meta name="description" content="Test Dart code in your browser">
+    <meta name="keywords" content="Dart, code, google, test"
+    
+  </head>
+  
+  <body>
+    <style type="text/css">
+      
+    </style>
+    <div style="min-height:300px; width: 98%; min-width:300px; height:auto !important; height:300px;">
+      <div id="editor" style="width:98%; min-width:300px; height:300px; "></div>
+    </div>
+       
+      <div style="width:85%; max-height:230px; min-width:300px; margin-top:10px; ">
+          <button id="run">Run</button> 
+          <span id="shortcode"></span>
+          <pre id="results" style="overflow:auto; max-height:100px min-width:300px; width:98%">Results Show Here...</pre>          
+      </div>
+    </div>
+    <div style="font-size:0.7em">
+      Using <a href="http://www.dartlang.org" target="_blank">Dart SDK</a> build r19425&nbsp;
+      <div class="g-plusone" data-size="small" data-annotation="inline" data-width="300"></div>
+    </div>
+    
+    <script type="application/dart" src="trydart.dart"></script>
+    <script src="packages/browser/dart.js"></script>
+    <script src="ace/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+        var editor = ace.edit("editor");
+        editor.setTheme("ace/theme/eclipse");
+        editor.getSession().setMode("ace/mode/dart");
+    </script>
+    
+    <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-312644-11']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+<!-- Place this tag after the last +1 button tag. -->
+<script type="text/javascript">
+  window.___gcfg = {lang: 'en-GB'};
+
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+</script>
+
+  </body>
+
+</html>

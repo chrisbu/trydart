@@ -106,19 +106,19 @@ class ShortcodeHandler {
   void _saveContent(HttpRequest req, String shortcode) {
     req.listen((List<int> data) {
       var content = new String.fromCharCodes(data);
-      content = content.replaceAll("new File", "new File<--Disabled-->");
-      content = content.replaceAll("extends File", "extends File<--Disabled-->");
-      content = content.replaceAll("new HttpServer", "new HttpServer<--Disabled-->");
-      content = content.replaceAll("extends HttpServer", "extends HttpServer<--Disabled-->");
-      content = content.replaceAll("new Directory", "new Directory<--Disabled-->");
-      content = content.replaceAll("extends Directory", "extends Directory<--Disabled-->");
-      content = content.replaceAll("new Socket", "new Socket<--Disabled-->");
-      content = content.replaceAll("extends Socket", "extends Socket<--Disabled-->");
-      content = content.replaceAll("Process.start", "Process.start<--Disabled-->");
-      content = content.replaceAll("Process.run", "Process.run<--Disabled-->");
-      content = content.replaceAll("extends Process", "extends Socket<--Disabled-->");
-      content = content.replaceAll("dart:io", "dart:io<--Disabled-->");
       
+      content = content.replaceAll("new File", "// new File <--Disabled-->");
+      content = content.replaceAll("extends File", "// extends File  <--Disabled-->");
+      content = content.replaceAll("new HttpServer", "// new HttpServer  <--Disabled-->");
+      content = content.replaceAll("extends HttpServer", "// extends HttpServer  <--Disabled-->");
+      content = content.replaceAll("new Directory", "// new Directory  <--Disabled-->");
+      content = content.replaceAll("extends Directory", "// extends Directory  <--Disabled-->");
+      content = content.replaceAll("new Socket", "// new Socket <--Disabled-->");
+      content = content.replaceAll("extends Socket", "// extends Socket <--Disabled-->");
+      content = content.replaceAll("Process.start", "// Process.start <--Disabled-->");
+      content = content.replaceAll("Process.run", "// Process.run <--Disabled-->");
+      content = content.replaceAll("extends Process", "// extends Socket <--Disabled-->");
+      content = content.replaceAll("dart:io", "// dart:io <--Disabled-->");
       shortcode = generateShortcode(content); // TODO: Error handling (may already exist).
       
       var dir = new Directory(WORK_FOLDER.replaceAll(SHORTCODE_TAG,shortcode));
@@ -135,6 +135,7 @@ class ShortcodeHandler {
         },
         onError: (error) => logger.severe("Error saving file: $nativePath\n$error"));              
       });
+      
     },
     onError: (error) => logger.severe("Error: $error"));
   }
@@ -160,7 +161,7 @@ class ShortcodeHandler {
         var s = new String.fromCharCodes(data);
         s = s.replaceAll("${config.FILE_URI_PREFIX}${config.ROOT_FOLDER}${shortcode}/", OBFUSCATED_FILE_URI_PREFIX);
         s = s.replaceAll("${DEFAULT_FILE}':", "${DEFAULT_FILE}':\n");
-        output.write("s");
+        output.write(s);
       });
       
       
