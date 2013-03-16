@@ -1,5 +1,7 @@
 name: trydart
 description: A sample web application
 dependencies:
-  browser: any
   js: any
+  dart_config: any
+  browser: any
+  logging: any

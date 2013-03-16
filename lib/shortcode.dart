@@ -15,16 +15,17 @@ const int _SC_LENGTH = 20;
  */ 
 String generateShortcode(String content) {
   final sha1 = new SHA1();
-  sha1.add(content.charCodes);
+  sha1.add(content.codeUnits);
   List digest = sha1.close();
   
   final sb = new StringBuffer();
   digest.forEach( (i) {
     var charpos = i % _SC_CHARS.length; // mod
-    sb.add(_SC_CHARS.substring(charpos, charpos+1)); // select the relevant char
+    sb.write(_SC_CHARS.substring(charpos, charpos+1)); // select the relevant char
   });
   
   final shortcode = sb.toString();
+  
   return shortcode;
 }
 

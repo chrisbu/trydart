@@ -30,8 +30,9 @@ init() {
   print("init");
   // get the file part of the path
   shortcode = pathToShortcode(window.location.pathname);
-  
+  print("shortcode: $shortcode");
   if (isValidShortcode(shortcode) && !isDefaultShortcode(shortcode)) {
+    print("loading shortcode");
     HttpRequest.getString("/load/$shortcode").then(shortcodeDataLoaded);
   } 
   else {
@@ -68,10 +69,11 @@ updateShortcode(_shortcode) {
 }
 
 void shortcodeDataLoaded(String responseText) {
-  query("#run").disabled = false;
+  ButtonElement runButton = query("#run");
+  runButton.disabled = false;
+  runButton.text = "Go Dart!";
+
   var map = parse(responseText);
-  query("#run").text = "Go Dart!";
-  
   js.scoped(() {
     var editor = js.context.editor;
     editor.setValue(map["file"]);
@@ -83,8 +85,9 @@ void shortcodeDataLoaded(String responseText) {
 }
 
 void onRunButtonClick(e) {
-  query("#run").disabled = true;
-  query("#run").text = "running...";
+  ButtonElement runButton = query("#run");
+  runButton.disabled = true;
+  runButton.text = "running...";
   var req = new HttpRequest();
   req.open("PUT", "/run/$shortcode", true, null, null);
   req.onProgress.listen((e) => shortcodeDataLoaded(req.responseText));

@@ -12,7 +12,7 @@ void createTextAreaWithLines(id)
   
   var ta = query("#$id");
   ta.parentNode.insertBefore(el,ta);
-  el.children.addLast(ta);
+  el.children.add(ta);
   el.classes.add('textAreaWithLines');
   el.style.width = "${(ta.offsetWidth + 30)}px";
   ta.style.position = 'absolute';
@@ -36,12 +36,12 @@ void createTextAreaWithLines(id)
     string = "${string}${no}";
   }
   
-  ta.on.keyDown.add((e) => positionLineObj(lineObj,ta));
-  ta.on.mouseDown.add((e) => positionLineObj(lineObj,ta));
-  ta.on.scroll.add((e) => positionLineObj(lineObj,ta));
-  ta.on.blur.add((e) => positionLineObj(lineObj,ta));
-  ta.on.focus.add((e) => positionLineObj(lineObj,ta));
-  ta.on.mouseOver.add((e) => positionLineObj(lineObj,ta));
+  ta.onKeyDown.listen((e) => positionLineObj(lineObj,ta));
+  ta.onMouseDown.listen((e) => positionLineObj(lineObj,ta));
+  ta.onScroll.listen((e) => positionLineObj(lineObj,ta));
+  ta.onBlur.listen((e) => positionLineObj(lineObj,ta));
+  ta.onFocus.listen((e) => positionLineObj(lineObj,ta));
+  ta.onMouseOver.listen((e) => positionLineObj(lineObj,ta));
   
   lineObj.innerHtml = string;  
 }
