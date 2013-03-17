@@ -173,9 +173,16 @@ class ShortcodeHandler {
           map["result"] = output.toString();
           map["shortcode"] = shortcode;
           
+          try {
           res.headers.add(HttpHeaders.CONTENT_TYPE, "application/json");
           res.addString(stringify(map));
-          res.close();  
+          }
+          catch (ex) {
+            logger.severe("error adding header running shortcode: $ex");
+          }
+          finally {
+            res.close();
+          }  
         });
         
       });
