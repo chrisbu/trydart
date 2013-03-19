@@ -104,9 +104,7 @@ class ShortcodeHandler {
   }
   
   void _saveContent(HttpRequest req, String shortcode) {
-    req.listen((List<int> data) {
-      var content = new String.fromCharCodes(data);
-      
+    req.transform(new StringDecoder()).listen((String content) {
       content = content.replaceAll("new File", "// new File <--Disabled-->");
       content = content.replaceAll("extends File", "// extends File  <--Disabled-->");
       content = content.replaceAll("new HttpServer", "// new HttpServer  <--Disabled-->");
@@ -152,39 +150,53 @@ class ShortcodeHandler {
       Stream stdoutStream = p.stdout;
       Stream stderrStream = p.stderr;
       
-      stdoutStream.listen((List<int> data) {
-        var s = new String.fromCharCodes(data);
-        output.write(s);
-      });
+      stdoutStream
+          .transform(new StringDecoder())
+          .listen((String data) => output.write(data), 
+          onError: (error) => logger.severe("error writing stdout to the output: $error"));
       
-      stderrStream.listen((List<int> data) {
-        var s = new String.fromCharCodes(data);
-        s = s.replaceAll("${config.FILE_URI_PREFIX}${config.ROOT_FOLDER}${shortcode}/", OBFUSCATED_FILE_URI_PREFIX);
-        s = s.replaceAll("${DEFAULT_FILE}':", "${DEFAULT_FILE}':\n");
-        output.write(s);
-      });
+      stderrStream
+          .transform(new StringDecoder())
+          .listen((String data) {
+            data = data.replaceAll("${config.FILE_URI_PREFIX}${config.ROOT_FOLDER}${shortcode}/", OBFUSCATED_FILE_URI_PREFIX);
+            data = data.replaceAll("${DEFAULT_FILE}':", "${DEFAULT_FILE}':\n");
+            output.write(data);
+          }, 
+          onError: (error) {
+            logger.severe("error writing stderr to the output: $error");  
+          });
       
       
       p.exitCode.then((e) {
         var map = new Map();
         
-        file.readAsString().then((String content) {
-          map["file"] = content;
-          map["result"] = output.toString();
-          map["shortcode"] = shortcode;
-          
-          try {
-          res.headers.add(HttpHeaders.CONTENT_TYPE, "application/json");
-          res.addString(stringify(map));
-          }
-          catch (ex) {
-            logger.severe("error adding header running shortcode: $ex");
-          }
-          finally {
-            res.close();
-          }  
-        });
+        var sb = new StringBuffer();
         
+        file.openRead()
+            .transform(new StringDecoder())
+            .listen((String content) {
+              sb.write(content);
+            }, 
+            onDone: () {
+              map["file"] = sb.toString();
+              map["result"] = output.toString();
+              map["shortcode"] = shortcode;
+              
+              res.headers.add(HttpHeaders.CONTENT_TYPE, "application/json");
+              res.addString(stringify(map));
+              res.close();
+            },
+            onError: (error) {
+              logger.severe("error adding header running shortcode: $error");
+              try {
+                res.close();
+              }
+              catch (ex) {
+                logger.severe("error closing response: $ex");
+              }
+            });
+      }).catchError((error) {
+        logger.severe("error catching exit code: $error");
       });
       
       var t = new Timer(new Duration(seconds:5), () {
