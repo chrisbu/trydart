@@ -92,13 +92,32 @@ class ShortcodeHandler {
     var file = new File(nativePath);
     
     var map = new Map();
-    file.readAsString().then((String content) {
-      map["file"] = content;
-      map["result"] = "Press RUN to execute your code...";
-      map["shortcode"] = shortcode.replaceAll("/", "");
-      
-      req.response.headers.add(HttpHeaders.CONTENT_TYPE, "application/json");
-      req.response.addString(stringify(map));
+    map["file"] = "// The Shortcode you requested does not exist";
+    map["result"] = "Press RUN to execute your code...";
+    map["shortcode"] = shortcode.replaceAll("/", "");
+    req.response.headers.add(HttpHeaders.CONTENT_TYPE, "application/json");
+    
+    file.exists().then((exists) {
+      if (exists) {
+        file.readAsString().then((String content) {
+          map["file"] = content;
+          map["result"] = "Press RUN to execute your code...";
+          map["shortcode"] = shortcode.replaceAll("/", "");
+          req.response.write(stringify(map));
+          req.response.close();
+        }).catchError((error) {
+          req.response.write(stringify(map));
+          logger.severe("4. Error handling content file: GET: $path\n$error");
+          req.response.close();
+        });
+      }
+      else {
+        req.response.write(stringify(map));
+        req.response.close();
+      }
+    }).catchError((error) {
+      req.response.write(stringify(map));
+      logger.severe("5. Error handling content file: GET: $path\n$error");
       req.response.close();
     });
   }
@@ -125,8 +144,8 @@ class ShortcodeHandler {
         var nativePath = path.toNativePath();
         var file = new File(path.toNativePath());
         
-        var fileSink = file.openWrite(FileMode.WRITE);
-        fileSink.addString(content);
+        var fileSink = file.openWrite();
+        fileSink.write(content);
         fileSink.close();
         fileSink.done.then((file) {
           runShortcode(shortcode, req.response);
@@ -183,7 +202,7 @@ class ShortcodeHandler {
               map["shortcode"] = shortcode;
               
               res.headers.add(HttpHeaders.CONTENT_TYPE, "application/json");
-              res.addString(stringify(map));
+              res.write(stringify(map));
               res.close();
             },
             onError: (error) {
@@ -208,7 +227,7 @@ class ShortcodeHandler {
     var vm_error = (ex) {
       logger.severe('Failed to start VM: ${ex.message}\n');
       res.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
-      res.addString(ex.toString());
+      res.write(ex.toString());
       res.close();
       return true;
     };

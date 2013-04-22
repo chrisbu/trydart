@@ -79,26 +79,30 @@ class StaticFileHandler {
       _addContentTypesByExtension(filename,req.response);
   
       var file = new File(filename);
-      logger.fine("created file");     
-      var fileStream = file.readAsBytes().asStream();
-      logger.fine("got file stream");
-      fileStream.pipe(req.response);
-      logger.fine("piped to response");
-      
-      //req.response.close();
-      logger.fine("closed response");
-//      file.readAsBytes().asStream().pipe(req.response)
-//        ..catchError((error) {
-//          req.response.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
-//          req.response.addString(error.toString());
-//          logger.severe("1. Error handling static file: GET: $path\n$error");
-//          req.response.close();
-//        });
-//      req.response.close();
+      file.exists().then((exists) {
+        if (exists) {
+        logger.fine("created file");
+        
+          logger.fine("closed response");
+          file.readAsBytes().asStream().pipe(req.response)
+            ..catchError((error) {
+              req.response.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+              req.response.write(error.toString());
+              logger.severe("1. Error handling static file: GET: $path\n$error");
+              req.response.close();
+            });
+        }
+        else {
+          req.response.statusCode = HttpStatus.NOT_FOUND;
+          req.response.write("$path not found");
+          req.response.close();
+        }
+          
+      });
     }
     catch (ex) {
       req.response.statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
-      req.response.addString(ex.toString());
+      req.response.write(ex.toString());
       logger.severe("2. Error handling static file: GET: $path\n$ex");
       req.response.close();
     }

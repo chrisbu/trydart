@@ -16,8 +16,7 @@ void main() {
     
     logger.info("Starting web server");
     startWebServer(config);
-  },
-  onError: (error) => print("Error loading config: ${error}"));
+  }).catchError((error) => print("Error loading config: ${error}"));
 }
 
 /**
@@ -35,16 +34,14 @@ void startWebServer(Map config) {
   var handlers = [new StaticFileHandler(logger),
                   new ShortcodeHandler(sfConfig, logger)];
   
-  HttpServer.bind(host, port).then((server) {
-    logger.info("Listening on $host:$port");
-    server.listen((request) {
-      handleRequests(request, handlers, notFound);
-    },
-    onError: (error) => logger.warning("server.listen: ${error}"));         
-  }, 
-  onError: (error) {
-    logger.severe("bind: $host:$port\n${error}");
-  });
+  HttpServer.bind(host, port)
+    .then((server) {
+      logger.info("Listening on $host:$port");
+      server.listen(
+          (request) => handleRequests(request, handlers, notFound),
+          onError: (error) => logger.warning("server.listen: ${error}"));
+    })
+    .catchError((error) =>logger.severe("bind: $host:$port\n${error}"));
 }
 
 /**
@@ -59,7 +56,7 @@ void handleRequests(HttpRequest request, handlers, notFoundHandler) {
     
     for (var handler in handlers) { // todo, cache handler lookup by request     
       if (handler.match(request)) {
-        logger.fine("Hanfler match: ${handler}");
+        logger.fine("Handler match: ${handler}");
         handlerFound = true;
         handler.handle(request);
         break;
@@ -86,7 +83,7 @@ void notFound(HttpRequest req) {
   logger.info("404: $method: $path");
   
   res.statusCode = HttpStatus.NOT_FOUND;
-  res.addString("""
+  res.write("""
 <html><head><title>404 not found</title></head>
 <body>
 <pre>$method: $path</pre><br/>
