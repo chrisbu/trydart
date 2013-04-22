@@ -120,7 +120,7 @@ void onRunButtonClick(e) {
   runButton.text = "running...";
   var req = new HttpRequest();
   print(shortcode);
-  req.open("PUT", "/run/$shortcode", true, null, null);
+  req.open("PUT", "/run/$shortcode");
   req.onProgress.listen((e) => shortcodeDataLoaded(req.responseText));
 
   // get the text from the editor
