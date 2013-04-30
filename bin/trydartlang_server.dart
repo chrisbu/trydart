@@ -4,10 +4,24 @@ import '../lib/staticfilehandler.dart';
 import '../lib/shortcodehandler.dart';
 import 'package:dart_config/default_server.dart';
 import 'package:logging/logging.dart';
+import 'dart:isolate';
 
 Logger logger = new Logger("try");
 
 void main() {
+  spawnFunction(isolateMain, uncaughtException);
+  port.receive((m,s) => print(m));
+}
+
+bool uncaughtException(error) {
+  print("Trydart uncaught error");
+  print(error);
+  spawnFunction(isolateMain, uncaughtException);
+  port.receive((m,s) => print(m));
+  return true;
+}
+
+void isolateMain() {
   hierarchicalLoggingEnabled = true;
   addLoggingHandler(logger, loggerStdOutHandler);
   
@@ -29,7 +43,8 @@ void startWebServer(Map config) {
   var sfConfig = new ShortcodeHandlerConfig(
       config["rootFolder"],
       config["drivePrefix"],
-      config["fileUriPrefix"]);
+      config["fileUriPrefix"],
+      config["vmpath"]);
   
   var handlers = [new StaticFileHandler(logger),
                   new ShortcodeHandler(sfConfig, logger)];

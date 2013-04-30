@@ -11,11 +11,13 @@ class ShortcodeHandlerConfig {
   final ROOT_FOLDER;
   final FILE_URI_PREFIX;
   final DRIVE_PREFIX;
+  final VM_PATH;
   
   ShortcodeHandlerConfig(
       this.ROOT_FOLDER,
       this.FILE_URI_PREFIX,
-      this.DRIVE_PREFIX);
+      this.DRIVE_PREFIX,
+      this.VM_PATH);
 }
 
 class ShortcodeHandler {
@@ -47,7 +49,6 @@ class ShortcodeHandler {
     var path = req.uri.path.toLowerCase();
     var method = req.method;
     
-    
     if  (method == "GET" || method == "PUT") {
       // starts with one of the valid paths, and is a valid shortcode?
       if (path.startsWith(RUN_URL_PATH)) {
@@ -70,6 +71,7 @@ class ShortcodeHandler {
    * the file, analyze it, run it, return the file and the results.
    */
   void handle(HttpRequest req) {
+    
     var shortcode = req.uri.path.substring(5, req.uri.path.length);
     if (req.method == "PUT") {
       logger.info("SAVE shortcode: $shortcode");
@@ -161,7 +163,7 @@ class ShortcodeHandler {
     var path = new Path("${config.DRIVE_PREFIX}${WORK_FOLDER.replaceAll(SHORTCODE_TAG,shortcode)}${DEFAULT_FILE}");
     var file = new File(path.toNativePath());
     
-    final String dartvm = new Options().executable;
+    final String dartvm = config.VM_PATH;//new Options().executable;    
     
     var vm_running = (Process p) {
       StringBuffer output = new StringBuffer();
@@ -232,6 +234,7 @@ class ShortcodeHandler {
       return true;
     };
 
+    print("$dartvm ${path.toNativePath()}");
     Process.start(dartvm, ["${path.toNativePath()}"])
       .then((p) => vm_running(p), onError: vm_error)
       .catchError(vm_error);

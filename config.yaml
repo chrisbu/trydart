@@ -4,8 +4,9 @@ port: 8080
 rootFolder: /work/tmp/
 drivePrefix: "c:"
 fileUriPrefix: "c:"
+vmpath: "c:/work/dart/editor/dart/dart-sdk/bin/dart.exe"
 
 # rootFolder: /data/darts/
 # drivePrefix: 
 # fileUriPrefix: "file://"
-loglevel: INFO
+loglevel: FINE
